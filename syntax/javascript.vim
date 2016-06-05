@@ -21,30 +21,30 @@ setlocal iskeyword+=$
 
 syntax sync fromstart
 
-syntax match   jsNoise           /[:,\;\.]\{1}/
+syntax match JavaScriptNoise           /[:,\;\.]\{1}/
 
 "" Program Keywords
-syntax keyword jsStorageClass   const var let
-syntax keyword jsOperator       delete instanceof typeof void new in
-syntax match   jsOperator       /[\!\|\&\+\-\<\>\=\%\/\*\~\^]\{1}/
-syntax keyword jsBooleanTrue    true
-syntax keyword jsBooleanFalse   false
-syntax keyword jsModules        import export contained
-syntax keyword jsModuleWords    default from as contained
-syntax keyword jsOf             of contained
-syntax keyword jsArgsObj        arguments
+syntax keyword JavaScriptStorageClass   const var let
+syntax keyword JavaScriptOperator       delete instanceof typeof void new in
+syntax match JavaScriptOperator       /[\!\|\&\+\-\<\>\=\%\/\*\~\^]\{1}/
+syntax keyword JavaScriptBooleanTrue    true
+syntax keyword JavaScriptBooleanFalse   false
+syntax keyword JavaScriptModules        import export contained
+syntax keyword JavaScriptModuleWords    default from as contained
+syntax keyword JavaScriptOf             of contained
+syntax keyword JavaScriptArgsObj        arguments
 
-syntax region jsImportContainer      start="^\s\?import \?" end=";\|$" contains=jsModules,jsModuleWords,jsLineComment,jsComment,jsStringS,jsStringD,jsTemplateString,jsNoise,jsBlock
+syntax region JavaScriptImportContainer      start="^\s\?import \?" end=";\|$" contains=JavaScriptModules,JavaScriptModuleWords,JavaScriptLineComment,JavaScriptComment,JavaScriptStringS,JavaScriptStringD,JavaScriptTemplateString,JavaScriptNoise,JavaScriptBlock
 
-syntax region jsExportContainer      start="^\s\?export \?" end="$" contains=jsModules,jsModuleWords,jsComment,jsTemplateString,jsStringD,jsStringS,jsRegexpString,jsNumber,jsFloat,jsThis,jsOperator,jsBooleanTrue,jsBooleanFalse,jsNull,jsFunction,jsArrowFunction,jsGlobalObjects,jsExceptions,jsDomErrNo,jsDomNodeConsts,jsHtmlEvents,jsDotNotation,jsBracket,jsParen,jsFuncCall,jsUndefined,jsNan,jsKeyword,jsStorageClass,jsPrototype,jsBuiltins,jsNoise,jsArgsObj,jsBlock,jsClassDefinition
+syntax region JavaScriptExportContainer      start="^\s\?export \?" end="$" contains=JavaScriptModules,JavaScriptModuleWords,JavaScriptComment,JavaScriptTemplateString,JavaScriptStringD,JavaScriptStringS,JavaScriptRegexpString,JavaScriptNumber,JavaScriptFloat,JavaScriptThis,JavaScriptOperator,JavaScriptBooleanTrue,JavaScriptBooleanFalse,JavaScriptNull,JavaScriptFunction,JavaScriptArrowFunction,JavaScriptGlobalObjects,JavaScriptExceptions,JavaScriptDomErrNo,JavaScriptDomNodeConsts,JavaScriptHtmlEvents,JavaScriptDotNotation,JavaScriptBracket,JavaScriptParen,JavaScriptFuncCall,JavaScriptUndefined,JavaScriptNan,JavaScriptKeyword,JavaScriptStorageClass,JavaScriptPrototype,JavaScriptBuiltins,JavaScriptNoise,JavaScriptArgsObj,JavaScriptBlock,JavaScriptClassDefinition
 
 "" JavaScript comments
-syntax keyword jsCommentTodo    TODO FIXME XXX TBD contained
-syntax region  jsLineComment    start=+\/\/+ end=+$+ keepend contains=jsCommentTodo,@Spell extend
-syntax region  jsEnvComment     start="\%^#!" end="$" display
-syntax region  jsLineComment    start=+^\s*\/\/+ skip=+\n\s*\/\/+ end=+$+ keepend contains=jsCommentTodo,@Spell fold
-syntax region  jsCvsTag         start="\$\cid:" end="\$" oneline contained
-syntax region  jsComment        start="/\*"  end="\*/" contains=jsCommentTodo,jsCvsTag,@Spell fold extend
+syntax keyword JavaScriptCommentTodo    TODO FIXME XXX TBD contained
+syntax region JavaScriptLineComment    start=+\/\/+ end=+$+ keepend contains=JavaScriptCommentTodo,@Spell extend
+syntax region JavaScriptEnvComment     start="\%^#!" end="$" display
+syntax region JavaScriptLineComment    start=+^\s*\/\/+ skip=+\n\s*\/\/+ end=+$+ keepend contains=JavaScriptCommentTodo,@Spell fold
+syntax region JavaScriptCvsTag         start="\$\cid:" end="\$" oneline contained
+syntax region JavaScriptComment        start="/\*"  end="\*/" contains=JavaScriptCommentTodo,JavaScriptCvsTag,@Spell fold extend
 
 "" JSDoc / JSDoc Toolkit
 if !exists("javascript_ignore_javaScriptdoc")
@@ -54,27 +54,27 @@ if !exists("javascript_ignore_javaScriptdoc")
   "syntax include @javaHtml <sfile>:p:h/html.vim
   "unlet b:current_syntax
 
-  syntax region jsBlockComment    matchgroup=jsComment start="/\*\s*"  end="\*/" contains=jsDocTags,jsCommentTodo,jsCvsTag,@jsHtml,@Spell fold
+  syntax region JavaScriptBlockComment    matchgroup=JavaScriptComment start="/\*\s*"  end="\*/" contains=JavaScriptDocTags,JavaScriptCommentTodo,JavaScriptCvsTag,@jsHtml,@Spell fold
 
   " tags containing a param
-  syntax match  jsDocTags         contained "@\(alias\|api\|augments\|borrows\|class\|constructs\|default\|defaultvalue\|emits\|exception\|exports\|extends\|fires\|kind\|link\|listens\|member\|member[oO]f\|mixes\|module\|name\|namespace\|requires\|template\|throws\|var\|variation\|version\)\>" nextgroup=jsDocParam skipwhite
+  syntax match JavaScriptDocTags         contained "@\(alias\|api\|augments\|borrows\|class\|constructs\|default\|defaultvalue\|emits\|exception\|exports\|extends\|fires\|kind\|link\|listens\|member\|member[oO]f\|mixes\|module\|name\|namespace\|requires\|template\|throws\|var\|variation\|version\)\>" nextgroup=JavaScriptDocParam skipwhite
   " tags containing type and param
-  syntax match  jsDocTags         contained "@\(arg\|argument\|cfg\|param\|property\|prop\)\>" nextgroup=jsDocType skipwhite
+  syntax match JavaScriptDocTags         contained "@\(arg\|argument\|cfg\|param\|property\|prop\)\>" nextgroup=JavaScriptDocType skipwhite
   " tags containing type but no param
-  syntax match  jsDocTags         contained "@\(callback\|define\|enum\|external\|implements\|this\|type\|typedef\|return\|returns\)\>" nextgroup=jsDocTypeNoParam skipwhite
+  syntax match JavaScriptDocTags         contained "@\(callback\|define\|enum\|external\|implements\|this\|type\|typedef\|return\|returns\)\>" nextgroup=JavaScriptDocTypeNoParam skipwhite
   " tags containing references
-  syntax match  jsDocTags         contained "@\(lends\|see\|tutorial\)\>" nextgroup=jsDocSeeTag skipwhite
+  syntax match JavaScriptDocTags         contained "@\(lends\|see\|tutorial\)\>" nextgroup=JavaScriptDocSeeTag skipwhite
   " other tags (no extra syntax)
-  syntax match  jsDocTags         contained "@\(abstract\|access\|accessor\|author\|classdesc\|constant\|const\|constructor\|copyright\|deprecated\|desc\|description\|dict\|event\|example\|file\|file[oO]verview\|final\|function\|global\|ignore\|inheritDoc\|inner\|instance\|interface\|license\|localdoc\|method\|mixin\|nosideeffects\|override\|overview\|preserve\|private\|protected\|public\|readonly\|since\|static\|struct\|todo\|summary\|undocumented\|virtual\)\>"
+  syntax match JavaScriptDocTags         contained "@\(abstract\|access\|accessor\|author\|classdesc\|constant\|const\|constructor\|copyright\|deprecated\|desc\|description\|dict\|event\|example\|file\|file[oO]verview\|final\|function\|global\|ignore\|inheritDoc\|inner\|instance\|interface\|license\|localdoc\|method\|mixin\|nosideeffects\|override\|overview\|preserve\|private\|protected\|public\|readonly\|since\|static\|struct\|todo\|summary\|undocumented\|virtual\)\>"
 
-  syntax region jsDocType         matchgroup=jsDocTypeBrackets start="{" end="}" oneline contained nextgroup=jsDocParam skipwhite contains=jsDocTypeRecord
-  syntax match  jsDocType         contained "\%(#\|\"\|\w\|\.\|:\|\/\)\+" nextgroup=jsDocParam skipwhite
-  syntax region jsDocTypeRecord   start=/{/ end=/}/ contained extend contains=jsDocTypeRecord
-  syntax region jsDocTypeRecord   start=/\[/ end=/\]/ contained extend contains=jsDocTypeRecord
-  syntax region jsDocTypeNoParam  start="{" end="}" oneline contained
-  syntax match  jsDocTypeNoParam  contained "\%(#\|\"\|\w\|\.\|:\|\/\)\+"
-  syntax match  jsDocParam        contained "\%(#\|\$\|-\|'\|\"\|{.\{-}}\|\w\|\.\|:\|\/\|\[.{-}]\|=\)\+"
-  syntax region jsDocSeeTag       contained matchgroup=jsDocSeeTag start="{" end="}" contains=jsDocTags
+  syntax region JavaScriptDocType         matchgroup=JavaScriptDocTypeBrackets start="{" end="}" oneline contained nextgroup=JavaScriptDocParam skipwhite contains=JavaScriptDocTypeRecord
+  syntax match JavaScriptDocType         contained "\%(#\|\"\|\w\|\.\|:\|\/\)\+" nextgroup=JavaScriptDocParam skipwhite
+  syntax region JavaScriptDocTypeRecord   start=/{/ end=/}/ contained extend contains=JavaScriptDocTypeRecord
+  syntax region JavaScriptDocTypeRecord   start=/\[/ end=/\]/ contained extend contains=JavaScriptDocTypeRecord
+  syntax region JavaScriptDocTypeNoParam  start="{" end="}" oneline contained
+  syntax match JavaScriptDocTypeNoParam  contained "\%(#\|\"\|\w\|\.\|:\|\/\)\+"
+  syntax match JavaScriptDocParam        contained "\%(#\|\$\|-\|'\|\"\|{.\{-}}\|\w\|\.\|:\|\/\|\[.{-}]\|=\)\+"
+  syntax region JavaScriptDocSeeTag       contained matchgroup=JavaScriptDocSeeTag start="{" end="}" contains=JavaScriptDocTags
 
   syntax case match
 endif   "" JSDoc end
@@ -82,73 +82,73 @@ endif   "" JSDoc end
 syntax case match
 
 "" Syntax in the JavaScript code
-syntax match   jsFuncCall         /\k\+\%(\s*(\)\@=/
-syntax match   jsSpecial          "\v\\%(0|\\x\x\{2\}\|\\u\x\{4\}\|\c[A-Z]|.)" contained
-syntax region  jsTemplateVar      matchgroup=jsTemplateBraces start=+${+ end=+}+ contained contains=@jsExpression
-syntax region  jsStringD          start=+"+  skip=+\\\("\|$\)+  end=+"\|$+  contains=jsSpecial,@htmlPreproc,@Spell
-syntax region  jsStringS          start=+'+  skip=+\\\('\|$\)+  end=+'\|$+  contains=jsSpecial,@htmlPreproc,@Spell
-syntax region  jsTemplateString   start=+`+  skip=+\\\(`\|$\)+  end=+`+     contains=jsTemplateVar,jsSpecial,@htmlPreproc
-syntax region  jsTaggedTemplate   start=/\k\+\%([\n\s]\+\)\?`/ end=+`+ contains=jsTemplateString keepend
-syntax region  jsRegexpCharClass  start=+\[+ skip=+\\.+ end=+\]+ contained
-syntax match   jsRegexpBoundary   "\v%(\<@![\^$]|\\[bB])" contained
-syntax match   jsRegexpBackRef    "\v\\[1-9][0-9]*" contained
-syntax match   jsRegexpQuantifier "\v\\@<!%([?*+]|\{\d+%(,|,\d+)?})\??" contained
-syntax match   jsRegexpOr         "\v\<@!\|" contained
-syntax match   jsRegexpMod        "\v\(@<=\?[:=!>]" contained
-syntax cluster jsRegexpSpecial    contains=jsSpecial,jsRegexpBoundary,jsRegexpBackRef,jsRegexpQuantifier,jsRegexpOr,jsRegexpMod
-syntax region  jsRegexpGroup      start="\\\@<!(" skip="\\.\|\[\(\\.\|[^]]\)*\]" end="\\\@<!)" contained contains=jsRegexpCharClass,@jsRegexpSpecial keepend
+syntax match JavaScriptFuncCall         /\k\+\%(\s*(\)\@=/
+syntax match JavaScriptSpecial          "\v\\%(0|\\x\x\{2\}\|\\u\x\{4\}\|\c[A-Z]|.)" contained
+syntax region JavaScriptTemplateVar      matchgroup=JavaScriptTemplateBraces start=+${+ end=+}+ contained contains=@jsExpression
+syntax region JavaScriptStringD          start=+"+  skip=+\\\("\|$\)+  end=+"\|$+  contains=JavaScriptSpecial,@htmlPreproc,@Spell
+syntax region JavaScriptStringS          start=+'+  skip=+\\\('\|$\)+  end=+'\|$+  contains=JavaScriptSpecial,@htmlPreproc,@Spell
+syntax region JavaScriptTemplateString   start=+`+  skip=+\\\(`\|$\)+  end=+`+     contains=JavaScriptTemplateVar,JavaScriptSpecial,@htmlPreproc
+syntax region JavaScriptTaggedTemplate   start=/\k\+\%([\n\s]\+\)\?`/ end=+`+ contains=JavaScriptTemplateString keepend
+syntax region JavaScriptRegexpCharClass  start=+\[+ skip=+\\.+ end=+\]+ contained
+syntax match JavaScriptRegexpBoundary   "\v%(\<@![\^$]|\\[bB])" contained
+syntax match JavaScriptRegexpBackRef    "\v\\[1-9][0-9]*" contained
+syntax match JavaScriptRegexpQuantifier "\v\\@<!%([?*+]|\{\d+%(,|,\d+)?})\??" contained
+syntax match JavaScriptRegexpOr         "\v\<@!\|" contained
+syntax match JavaScriptRegexpMod        "\v\(@<=\?[:=!>]" contained
+syntax cluster jsRegexpSpecial    contains=JavaScriptSpecial,JavaScriptRegexpBoundary,JavaScriptRegexpBackRef,JavaScriptRegexpQuantifier,JavaScriptRegexpOr,JavaScriptRegexpMod
+syntax region JavaScriptRegexpGroup      start="\\\@<!(" skip="\\.\|\[\(\\.\|[^]]\)*\]" end="\\\@<!)" contained contains=JavaScriptRegexpCharClass,@jsRegexpSpecial keepend
 if v:version > 703 || v:version == 603 && has("patch1088")
-  syntax region  jsRegexpString     start=+\%(\%(\%(return\|case\)\s\+\)\@50<=\|\%(\%([)\]"']\|\d\|\w\)\s*\)\@50<!\)/\(\*\|/\)\@!+ skip=+\\.\|\[\%(\\.\|[^]]\)*\]+ end=+/[gimy]\{,4}+ contains=jsRegexpCharClass,jsRegexpGroup,@jsRegexpSpecial,@htmlPreproc oneline keepend
+  syntax region JavaScriptRegexpString     start=+\%(\%(\%(return\|case\)\s\+\)\@50<=\|\%(\%([)\]"']\|\d\|\w\)\s*\)\@50<!\)/\(\*\|/\)\@!+ skip=+\\.\|\[\%(\\.\|[^]]\)*\]+ end=+/[gimy]\{,4}+ contains=JavaScriptRegexpCharClass,JavaScriptRegexpGroup,@jsRegexpSpecial,@htmlPreproc oneline keepend
 else
-  syntax region  jsRegexpString     start=+\%(\%(\%(return\|case\)\s\+\)\@<=\|\%(\%([)\]"']\|\d\|\w\)\s*\)\@<!\)/\(\*\|/\)\@!+ skip=+\\.\|\[\%(\\.\|[^]]\)*\]+ end=+/[gimy]\{,4}+ contains=jsRegexpCharClass,jsRegexpGroup,@jsRegexpSpecial,@htmlPreproc oneline keepend
+  syntax region JavaScriptRegexpString     start=+\%(\%(\%(return\|case\)\s\+\)\@<=\|\%(\%([)\]"']\|\d\|\w\)\s*\)\@<!\)/\(\*\|/\)\@!+ skip=+\\.\|\[\%(\\.\|[^]]\)*\]+ end=+/[gimy]\{,4}+ contains=JavaScriptRegexpCharClass,JavaScriptRegexpGroup,@jsRegexpSpecial,@htmlPreproc oneline keepend
 endif
-syntax match   jsNumber           /\<-\=\d\+\(L\|[eE][+-]\=\d\+\)\=\>\|\<0[xX]\x\+\>/
-syntax keyword jsNumber           Infinity
-syntax match   jsFloat            /\<-\=\%(\d\+\.\d\+\|\d\+\.\|\.\d\+\)\%([eE][+-]\=\d\+\)\=\>/
-syntax match   jsObjectKey        /\<[a-zA-Z_$][0-9a-zA-Z_$]*\>\(\s*:\)\@=/ contains=jsFunctionKey contained
-syntax match   jsFunctionKey      /\<[a-zA-Z_$][0-9a-zA-Z_$]*\>\(\s*:\s*function\s*\)\@=/ contained
-syntax match   jsDecorator        "@" display contains=jsDecoratorFunction nextgroup=jsDecoratorFunction skipwhite
-syntax match   jsDecoratorFunction "[a-zA-Z_][a-zA-Z0-9_.]*" display contained nextgroup=jsFunc skipwhite
+syntax match JavaScriptNumber           /\<-\=\d\+\(L\|[eE][+-]\=\d\+\)\=\>\|\<0[xX]\x\+\>/
+syntax keyword JavaScriptNumber           Infinity
+syntax match JavaScriptFloat            /\<-\=\%(\d\+\.\d\+\|\d\+\.\|\.\d\+\)\%([eE][+-]\=\d\+\)\=\>/
+syntax match JavaScriptObjectKey        /\<[a-zA-Z_$][0-9a-zA-Z_$]*\>\(\s*:\)\@=/ contains=JavaScriptFunctionKey contained
+syntax match JavaScriptFunctionKey      /\<[a-zA-Z_$][0-9a-zA-Z_$]*\>\(\s*:\s*function\s*\)\@=/ contained
+syntax match JavaScriptDecorator        "@" display contains=JavaScriptDecoratorFunction nextgroup=JavaScriptDecoratorFunction skipwhite
+syntax match JavaScriptDecoratorFunction "[a-zA-Z_][a-zA-Z0-9_.]*" display contained nextgroup=JavaScriptFunc skipwhite
 
-exe 'syntax keyword jsNull      null      '.(exists('g:javascript_conceal_null')        ? 'conceal cchar='.g:javascript_conceal_null        : '')
-exe 'syntax keyword jsReturn    return    '.(exists('g:javascript_conceal_return')      ? 'conceal cchar='.g:javascript_conceal_return      : '')
-exe 'syntax keyword jsUndefined undefined '.(exists('g:javascript_conceal_undefined')   ? 'conceal cchar='.g:javascript_conceal_undefined   : '')
-exe 'syntax keyword jsNan       NaN       '.(exists('g:javascript_conceal_NaN')         ? 'conceal cchar='.g:javascript_conceal_NaN         : '')
-exe 'syntax keyword jsPrototype prototype '.(exists('g:javascript_conceal_prototype')   ? 'conceal cchar='.g:javascript_conceal_prototype   : '')
-exe 'syntax keyword jsThis      this      '.(exists('g:javascript_conceal_this')        ? 'conceal cchar='.g:javascript_conceal_this        : '')
-exe 'syntax keyword jsStatic    static    '.(exists('g:javascript_conceal_static')      ? 'conceal cchar='.g:javascript_conceal_static      : '')
-exe 'syntax keyword jsSuper     super     '.(exists('g:javascript_conceal_super')       ? 'conceal cchar='.g:javascript_conceal_super       : '')
+exe 'syntax keyword JavaScriptNull      null      '.(exists('g:javascript_conceal_null')        ? 'conceal cchar='.g:javascript_conceal_null        : '')
+exe 'syntax keyword JavaScriptReturn    return    '.(exists('g:javascript_conceal_return')      ? 'conceal cchar='.g:javascript_conceal_return      : '')
+exe 'syntax keyword JavaScriptUndefined undefined '.(exists('g:javascript_conceal_undefined')   ? 'conceal cchar='.g:javascript_conceal_undefined   : '')
+exe 'syntax keyword JavaScriptNan       NaN       '.(exists('g:javascript_conceal_NaN')         ? 'conceal cchar='.g:javascript_conceal_NaN         : '')
+exe 'syntax keyword JavaScriptPrototype prototype '.(exists('g:javascript_conceal_prototype')   ? 'conceal cchar='.g:javascript_conceal_prototype   : '')
+exe 'syntax keyword JavaScriptThis      this      '.(exists('g:javascript_conceal_this')        ? 'conceal cchar='.g:javascript_conceal_this        : '')
+exe 'syntax keyword JavaScriptStatic    static    '.(exists('g:javascript_conceal_static')      ? 'conceal cchar='.g:javascript_conceal_static      : '')
+exe 'syntax keyword JavaScriptSuper     super     '.(exists('g:javascript_conceal_super')       ? 'conceal cchar='.g:javascript_conceal_super       : '')
 
 "" Statement Keywords
-syntax keyword jsStatement      break continue with
-syntax keyword jsConditional    if else switch
-syntax keyword jsRepeat         do while for
-syntax keyword jsLabel          case default
-syntax keyword jsKeyword        yield
-syntax keyword jsException      try catch throw finally
-syntax keyword jsAsyncKeyword   async await
+syntax keyword JavaScriptStatement      break continue with
+syntax keyword JavaScriptConditional    if else switch
+syntax keyword JavaScriptRepeat         do while for
+syntax keyword JavaScriptLabel          case default
+syntax keyword JavaScriptKeyword        yield
+syntax keyword JavaScriptException      try catch throw finally
+syntax keyword JavaScriptAsyncKeyword   async await
 
-syntax keyword jsGlobalObjects   Array Boolean Date Function Iterator Number Object Symbol Map WeakMap Set RegExp String Proxy Promise Buffer ParallelArray ArrayBuffer DataView Float32Array Float64Array Int16Array Int32Array Int8Array Uint16Array Uint32Array Uint8Array Uint8ClampedArray JSON Math console document window Intl Collator DateTimeFormat NumberFormat
+syntax keyword JavaScriptGlobalObjects   Array Boolean Date Function Iterator Number Object Symbol Map WeakMap Set RegExp String Proxy Promise Buffer ParallelArray ArrayBuffer DataView Float32Array Float64Array Int16Array Int32Array Int8Array Uint16Array Uint32Array Uint8Array Uint8ClampedArray JSON Math console document window Intl Collator DateTimeFormat NumberFormat
 
-syntax keyword jsExceptions     Error EvalError InternalError RangeError ReferenceError StopIteration SyntaxError TypeError URIError
+syntax keyword JavaScriptExceptions     Error EvalError InternalError RangeError ReferenceError StopIteration SyntaxError TypeError URIError
 
-syntax keyword jsBuiltins       decodeURI decodeURIComponent encodeURI encodeURIComponent eval isFinite isNaN parseFloat parseInt uneval
+syntax keyword JavaScriptBuiltins       decodeURI decodeURIComponent encodeURI encodeURIComponent eval isFinite isNaN parseFloat parseInt uneval
 
-syntax keyword jsFutureKeys     abstract enum int short boolean interface byte long char final native synchronized float package throws goto private transient debugger implements protected volatile double public
+syntax keyword JavaScriptFutureKeys     abstract enum int short boolean interface byte long char final native synchronized float package throws goto private transient debugger implements protected volatile double public
 
 "" DOM/HTML/CSS specified things
 
 " DOM2 Objects
-syntax keyword jsGlobalObjects  DOMImplementation DocumentFragment Document Node NodeList NamedNodeMap CharacterData Attr Element Text Comment CDATASection DocumentType Notation Entity EntityReference ProcessingInstruction
-syntax keyword jsExceptions     DOMException
+syntax keyword JavaScriptGlobalObjects  DOMImplementation DocumentFragment Document Node NodeList NamedNodeMap CharacterData Attr Element Text Comment CDATASection DocumentType Notation Entity EntityReference ProcessingInstruction
+syntax keyword JavaScriptExceptions     DOMException
 
 " DOM2 CONSTANT
-syntax keyword jsDomErrNo       INDEX_SIZE_ERR DOMSTRING_SIZE_ERR HIERARCHY_REQUEST_ERR WRONG_DOCUMENT_ERR INVALID_CHARACTER_ERR NO_DATA_ALLOWED_ERR NO_MODIFICATION_ALLOWED_ERR NOT_FOUND_ERR NOT_SUPPORTED_ERR INUSE_ATTRIBUTE_ERR INVALID_STATE_ERR SYNTAX_ERR INVALID_MODIFICATION_ERR NAMESPACE_ERR INVALID_ACCESS_ERR
-syntax keyword jsDomNodeConsts  ELEMENT_NODE ATTRIBUTE_NODE TEXT_NODE CDATA_SECTION_NODE ENTITY_REFERENCE_NODE ENTITY_NODE PROCESSING_INSTRUCTION_NODE COMMENT_NODE DOCUMENT_NODE DOCUMENT_TYPE_NODE DOCUMENT_FRAGMENT_NODE NOTATION_NODE
+syntax keyword JavaScriptDomErrNo       INDEX_SIZE_ERR DOMSTRING_SIZE_ERR HIERARCHY_REQUEST_ERR WRONG_DOCUMENT_ERR INVALID_CHARACTER_ERR NO_DATA_ALLOWED_ERR NO_MODIFICATION_ALLOWED_ERR NOT_FOUND_ERR NOT_SUPPORTED_ERR INUSE_ATTRIBUTE_ERR INVALID_STATE_ERR SYNTAX_ERR INVALID_MODIFICATION_ERR NAMESPACE_ERR INVALID_ACCESS_ERR
+syntax keyword JavaScriptDomNodeConsts  ELEMENT_NODE ATTRIBUTE_NODE TEXT_NODE CDATA_SECTION_NODE ENTITY_REFERENCE_NODE ENTITY_NODE PROCESSING_INSTRUCTION_NODE COMMENT_NODE DOCUMENT_NODE DOCUMENT_TYPE_NODE DOCUMENT_FRAGMENT_NODE NOTATION_NODE
 
 " HTML events and internal variables
 syntax case ignore
-syntax keyword jsHtmlEvents     onblur onclick oncontextmenu ondblclick onfocus onkeydown onkeypress onkeyup onmousedown onmousemove onmouseout onmouseover onmouseup onresize
+syntax keyword JavaScriptHtmlEvents     onblur onclick oncontextmenu ondblclick onfocus onkeydown onkeypress onkeyup onmousedown onmousemove onmouseout onmouseover onmouseup onresize
 syntax case match
 
 " Follow stuff should be highligh within a special context
@@ -157,72 +157,72 @@ syntax case match
 if exists("javascript_enable_domhtmlcss")
 
     " DOM2 things
-    syntax match jsDomElemAttrs     contained /\%(nodeName\|nodeValue\|nodeType\|parentNode\|childNodes\|firstChild\|lastChild\|previousSibling\|nextSibling\|attributes\|ownerDocument\|namespaceURI\|prefix\|localName\|tagName\)\>/
-    syntax match jsDomElemFuncs     contained /\%(insertBefore\|replaceChild\|removeChild\|appendChild\|hasChildNodes\|cloneNode\|normalize\|isSupported\|hasAttributes\|getAttribute\|setAttribute\|removeAttribute\|getAttributeNode\|setAttributeNode\|removeAttributeNode\|getElementById\|getElementsByClassName\|getElementsByTagName\|querySelector\|querySelectorAll\|getAttributeNS\|setAttributeNS\|removeAttributeNS\|getAttributeNodeNS\|setAttributeNodeNS\|getElementsByTagNameNS\|hasAttribute\|hasAttributeNS\)\>/ nextgroup=jsParen skipwhite
+    syntax match JavaScriptDomElemAttrs     contained /\%(nodeName\|nodeValue\|nodeType\|parentNode\|childNodes\|firstChild\|lastChild\|previousSibling\|nextSibling\|attributes\|ownerDocument\|namespaceURI\|prefix\|localName\|tagName\)\>/
+    syntax match JavaScriptDomElemFuncs     contained /\%(insertBefore\|replaceChild\|removeChild\|appendChild\|hasChildNodes\|cloneNode\|normalize\|isSupported\|hasAttributes\|getAttribute\|setAttribute\|removeAttribute\|getAttributeNode\|setAttributeNode\|removeAttributeNode\|getElementById\|getElementsByClassName\|getElementsByTagName\|querySelector\|querySelectorAll\|getAttributeNS\|setAttributeNS\|removeAttributeNS\|getAttributeNodeNS\|setAttributeNodeNS\|getElementsByTagNameNS\|hasAttribute\|hasAttributeNS\)\>/ nextgroup=JavaScriptParen skipwhite
     " HTML things
-    syntax match jsHtmlElemAttrs    contained /\%(className\|clientHeight\|clientLeft\|clientTop\|clientWidth\|dir\|id\|innerHTML\|lang\|length\|offsetHeight\|offsetLeft\|offsetParent\|offsetTop\|offsetWidth\|scrollHeight\|scrollLeft\|scrollTop\|scrollWidth\|style\|tabIndex\|title\)\>/
-    syntax match jsHtmlElemFuncs    contained /\%(blur\|click\|focus\|scrollIntoView\|addEventListener\|dispatchEvent\|removeEventListener\|item\)\>/ nextgroup=jsParen skipwhite
+    syntax match JavaScriptHtmlElemAttrs    contained /\%(className\|clientHeight\|clientLeft\|clientTop\|clientWidth\|dir\|id\|innerHTML\|lang\|length\|offsetHeight\|offsetLeft\|offsetParent\|offsetTop\|offsetWidth\|scrollHeight\|scrollLeft\|scrollTop\|scrollWidth\|style\|tabIndex\|title\)\>/
+    syntax match JavaScriptHtmlElemFuncs    contained /\%(blur\|click\|focus\|scrollIntoView\|addEventListener\|dispatchEvent\|removeEventListener\|item\)\>/ nextgroup=JavaScriptParen skipwhite
 
     " CSS Styles in JavaScript
-    syntax keyword jsCssStyles      contained color font fontFamily fontSize fontSizeAdjust fontStretch fontStyle fontVariant fontWeight letterSpacing lineBreak lineHeight quotes rubyAlign rubyOverhang rubyPosition
-    syntax keyword jsCssStyles      contained textAlign textAlignLast textAutospace textDecoration textIndent textJustify textJustifyTrim textKashidaSpace textOverflowW6 textShadow textTransform textUnderlinePosition
-    syntax keyword jsCssStyles      contained unicodeBidi whiteSpace wordBreak wordSpacing wordWrap writingMode
-    syntax keyword jsCssStyles      contained bottom height left position right top width zIndex
-    syntax keyword jsCssStyles      contained border borderBottom borderLeft borderRight borderTop borderBottomColor borderLeftColor borderTopColor borderBottomStyle borderLeftStyle borderRightStyle borderTopStyle borderBottomWidth borderLeftWidth borderRightWidth borderTopWidth borderColor borderStyle borderWidth borderCollapse borderSpacing captionSide emptyCells tableLayout
-    syntax keyword jsCssStyles      contained margin marginBottom marginLeft marginRight marginTop outline outlineColor outlineStyle outlineWidth padding paddingBottom paddingLeft paddingRight paddingTop
-    syntax keyword jsCssStyles      contained listStyle listStyleImage listStylePosition listStyleType
-    syntax keyword jsCssStyles      contained background backgroundAttachment backgroundColor backgroundImage backgroundPosition backgroundPositionX backgroundPositionY backgroundRepeat
-    syntax keyword jsCssStyles      contained clear clip clipBottom clipLeft clipRight clipTop content counterIncrement counterReset cssFloat cursor direction display filter layoutGrid layoutGridChar layoutGridLine layoutGridMode layoutGridType
-    syntax keyword jsCssStyles      contained marks maxHeight maxWidth minHeight minWidth opacity MozOpacity overflow overflowX overflowY verticalAlign visibility zoom cssText
-    syntax keyword jsCssStyles      contained scrollbar3dLightColor scrollbarArrowColor scrollbarBaseColor scrollbarDarkShadowColor scrollbarFaceColor scrollbarHighlightColor scrollbarShadowColor scrollbarTrackColor
+    syntax keyword JavaScriptCssStyles      contained color font fontFamily fontSize fontSizeAdjust fontStretch fontStyle fontVariant fontWeight letterSpacing lineBreak lineHeight quotes rubyAlign rubyOverhang rubyPosition
+    syntax keyword JavaScriptCssStyles      contained textAlign textAlignLast textAutospace textDecoration textIndent textJustify textJustifyTrim textKashidaSpace textOverflowW6 textShadow textTransform textUnderlinePosition
+    syntax keyword JavaScriptCssStyles      contained unicodeBidi whiteSpace wordBreak wordSpacing wordWrap writingMode
+    syntax keyword JavaScriptCssStyles      contained bottom height left position right top width zIndex
+    syntax keyword JavaScriptCssStyles      contained border borderBottom borderLeft borderRight borderTop borderBottomColor borderLeftColor borderTopColor borderBottomStyle borderLeftStyle borderRightStyle borderTopStyle borderBottomWidth borderLeftWidth borderRightWidth borderTopWidth borderColor borderStyle borderWidth borderCollapse borderSpacing captionSide emptyCells tableLayout
+    syntax keyword JavaScriptCssStyles      contained margin marginBottom marginLeft marginRight marginTop outline outlineColor outlineStyle outlineWidth padding paddingBottom paddingLeft paddingRight paddingTop
+    syntax keyword JavaScriptCssStyles      contained listStyle listStyleImage listStylePosition listStyleType
+    syntax keyword JavaScriptCssStyles      contained background backgroundAttachment backgroundColor backgroundImage backgroundPosition backgroundPositionX backgroundPositionY backgroundRepeat
+    syntax keyword JavaScriptCssStyles      contained clear clip clipBottom clipLeft clipRight clipTop content counterIncrement counterReset cssFloat cursor direction display filter layoutGrid layoutGridChar layoutGridLine layoutGridMode layoutGridType
+    syntax keyword JavaScriptCssStyles      contained marks maxHeight maxWidth minHeight minWidth opacity MozOpacity overflow overflowX overflowY verticalAlign visibility zoom cssText
+    syntax keyword JavaScriptCssStyles      contained scrollbar3dLightColor scrollbarArrowColor scrollbarBaseColor scrollbarDarkShadowColor scrollbarFaceColor scrollbarHighlightColor scrollbarShadowColor scrollbarTrackColor
 
     " Highlight ways
-    syntax match jsDotNotation      "\." nextgroup=jsPrototype,jsDomElemAttrs,jsDomElemFuncs,jsHtmlElemAttrs,jsHtmlElemFuncs
-    syntax match jsDotNotation      "\.style\." nextgroup=jsCssStyles
+    syntax match JavaScriptDotNotation      "\." nextgroup=JavaScriptPrototype,JavaScriptDomElemAttrs,JavaScriptDomElemFuncs,JavaScriptHtmlElemAttrs,JavaScriptHtmlElemFuncs
+    syntax match JavaScriptDotNotation      "\.style\." nextgroup=JavaScriptCssStyles
 
 endif "DOM/HTML/CSS
 
 "" end DOM/HTML/CSS specified things
 
 "" Code blocks
-syntax cluster jsExpression contains=jsComment,jsLineComment,jsBlockComment,jsTaggedTemplate,jsTemplateString,jsStringD,jsStringS,jsRegexpString,jsNumber,jsFloat,jsThis,jsStatic,jsSuper,jsOperator,jsBooleanTrue,jsBooleanFalse,jsNull,jsFunction,jsArrowFunction,jsGlobalObjects,jsExceptions,jsFutureKeys,jsDomErrNo,jsDomNodeConsts,jsHtmlEvents,jsDotNotation,jsBracket,jsParen,jsBlock,jsFuncCall,jsUndefined,jsNan,jsKeyword,jsStorageClass,jsPrototype,jsBuiltins,jsNoise,jsCommonJS,jsImportContainer,jsExportContainer,jsArgsObj,jsDecorator,jsAsyncKeyword,jsClassDefinition,jsArrowFunction,jsArrowFuncArgs
-syntax cluster jsAll        contains=@jsExpression,jsLabel,jsConditional,jsRepeat,jsReturn,jsStatement,jsTernaryIf,jsException
-syntax region  jsBracket    matchgroup=jsBrackets     start="\[" end="\]" contains=@jsAll,jsParensErrB,jsParensErrC,jsBracket,jsParen,jsBlock,@htmlPreproc fold
-syntax region  jsParen      matchgroup=jsParens       start="("  end=")"  contains=@jsAll,jsOf,jsParensErrA,jsParensErrC,jsParen,jsBracket,jsBlock,@htmlPreproc fold extend
-syntax region  jsClassBlock matchgroup=jsClassBraces  start="{"  end="}"  contains=jsFuncName,jsClassMethodDefinitions,jsOperator,jsArrowFunction,jsArrowFuncArgs,jsComment,jsBlockComment,jsLineComment,jsGenerator contained fold
-syntax region  jsFuncBlock  matchgroup=jsFuncBraces   start="{"  end="}"  contains=@jsAll,jsParensErrA,jsParensErrB,jsParen,jsBracket,jsBlock,@htmlPreproc,jsClassDefinition fold extend
-syntax region  jsBlock      matchgroup=jsBraces       start="{"  end="}"  contains=@jsAll,jsParensErrA,jsParensErrB,jsParen,jsBracket,jsBlock,jsObjectKey,@htmlPreproc,jsClassDefinition extend
-syntax region  jsTernaryIf  matchgroup=jsTernaryIfOperator start=+?+  end=+:+  contains=@jsExpression,jsTernaryIf
+syntax cluster jsExpression contains=JavaScriptComment,JavaScriptLineComment,JavaScriptBlockComment,JavaScriptTaggedTemplate,JavaScriptTemplateString,JavaScriptStringD,JavaScriptStringS,JavaScriptRegexpString,JavaScriptNumber,JavaScriptFloat,JavaScriptThis,JavaScriptStatic,JavaScriptSuper,JavaScriptOperator,JavaScriptBooleanTrue,JavaScriptBooleanFalse,JavaScriptNull,JavaScriptFunction,JavaScriptArrowFunction,JavaScriptGlobalObjects,JavaScriptExceptions,JavaScriptFutureKeys,JavaScriptDomErrNo,JavaScriptDomNodeConsts,JavaScriptHtmlEvents,JavaScriptDotNotation,JavaScriptBracket,JavaScriptParen,JavaScriptBlock,JavaScriptFuncCall,JavaScriptUndefined,JavaScriptNan,JavaScriptKeyword,JavaScriptStorageClass,JavaScriptPrototype,JavaScriptBuiltins,JavaScriptNoise,JavaScriptCommonJS,JavaScriptImportContainer,JavaScriptExportContainer,JavaScriptArgsObj,JavaScriptDecorator,JavaScriptAsyncKeyword,JavaScriptClassDefinition,JavaScriptArrowFunction,JavaScriptArrowFuncArgs
+syntax cluster jsAll        contains=@jsExpression,JavaScriptLabel,JavaScriptConditional,JavaScriptRepeat,JavaScriptReturn,JavaScriptStatement,JavaScriptTernaryIf,JavaScriptException
+syntax region JavaScriptBracket    matchgroup=JavaScriptBrackets     start="\[" end="\]" contains=@jsAll,JavaScriptParensErrB,JavaScriptParensErrC,JavaScriptBracket,JavaScriptParen,JavaScriptBlock,@htmlPreproc fold
+syntax region JavaScriptParen      matchgroup=JavaScriptParens       start="("  end=")"  contains=@jsAll,JavaScriptOf,JavaScriptParensErrA,JavaScriptParensErrC,JavaScriptParen,JavaScriptBracket,JavaScriptBlock,@htmlPreproc fold extend
+syntax region JavaScriptClassBlock matchgroup=JavaScriptClassBraces  start="{"  end="}"  contains=JavaScriptFuncName,JavaScriptClassMethodDefinitions,JavaScriptOperator,JavaScriptArrowFunction,JavaScriptArrowFuncArgs,JavaScriptComment,JavaScriptBlockComment,JavaScriptLineComment,JavaScriptGenerator contained fold
+syntax region JavaScriptFuncBlock  matchgroup=JavaScriptFuncBraces   start="{"  end="}"  contains=@jsAll,JavaScriptParensErrA,JavaScriptParensErrB,JavaScriptParen,JavaScriptBracket,JavaScriptBlock,@htmlPreproc,JavaScriptClassDefinition fold extend
+syntax region JavaScriptBlock      matchgroup=JavaScriptBraces       start="{"  end="}"  contains=@jsAll,JavaScriptParensErrA,JavaScriptParensErrB,JavaScriptParen,JavaScriptBracket,JavaScriptBlock,JavaScriptObjectKey,@htmlPreproc,JavaScriptClassDefinition extend
+syntax region JavaScriptTernaryIf  matchgroup=JavaScriptTernaryIfOperator start=+?+  end=+:+  contains=@jsExpression,JavaScriptTernaryIf
 
 "" catch errors caused by wrong parenthesis
-syntax match   jsParensError    ")\|}\|\]"
-syntax match   jsParensErrA     contained "\]"
-syntax match   jsParensErrB     contained ")"
-syntax match   jsParensErrC     contained "}"
+syntax match JavaScriptParensError    ")\|}\|\]"
+syntax match JavaScriptParensErrA     contained "\]"
+syntax match JavaScriptParensErrB     contained ")"
+syntax match JavaScriptParensErrC     contained "}"
 
-syntax match   jsFuncArgDestructuring contained /\({\|}\|=\|:\|\[\|\]\)/ extend
-exe 'syntax match jsFunction /\<function\>/ nextgroup=jsGenerator,jsFuncName,jsFuncArgs skipwhite '.(exists('g:javascript_conceal_function') ? 'conceal cchar='.g:javascript_conceal_function : '')
-exe 'syntax match jsArrowFunction /=>/ skipwhite nextgroup=jsFuncBlock contains=jsFuncBraces '.(exists('g:javascript_conceal_arrow_function') ? 'conceal cchar='.g:javascript_conceal_arrow_function : '')
+syntax match JavaScriptFuncArgDestructuring contained /\({\|}\|=\|:\|\[\|\]\)/ extend
+exe 'syntax match JavaScriptFunction /\<function\>/ nextgroup=JavaScriptGenerator,JavaScriptFuncName,JavaScriptFuncArgs skipwhite '.(exists('g:javascript_conceal_function') ? 'conceal cchar='.g:javascript_conceal_function : '')
+exe 'syntax match JavaScriptArrowFunction /=>/ skipwhite nextgroup=JavaScriptFuncBlock contains=JavaScriptFuncBraces '.(exists('g:javascript_conceal_arrow_function') ? 'conceal cchar='.g:javascript_conceal_arrow_function : '')
 
-syntax match   jsGenerator       contained /\*/ nextgroup=jsFuncName,jsFuncArgs skipwhite skipempty
-syntax match   jsFuncName        contained /\<[a-zA-Z_$][0-9a-zA-Z_$]*/ nextgroup=jsFuncArgs skipwhite skipempty
+syntax match JavaScriptGenerator       contained /\*/ nextgroup=JavaScriptFuncName,JavaScriptFuncArgs skipwhite skipempty
+syntax match JavaScriptFuncName        contained /\<[a-zA-Z_$][0-9a-zA-Z_$]*/ nextgroup=JavaScriptFuncArgs skipwhite skipempty
 " These versions of jsFuncName is for use in object declarations with no key
-" syntax match   jsFuncName        contained /\%(^[\r\n\t ]*\)\@<=[*\r\n\t ]*[a-zA-Z_$][0-9a-zA-Z_$]*[\r\n\t ]*(\@=/ nextgroup=jsFuncArgs skipwhite skipempty containedin=jsBlock contains=jsGenerator
-" syntax match   jsFuncName        contained /\%(,[\r\n\t ]*\)\@<=[*\r\n\t ]*[a-zA-Z_$][0-9a-zA-Z_$]*[\r\n\t ]*(\@=/ nextgroup=jsFuncArgs skipwhite skipempty containedin=jsBlock contains=jsGenerator
-syntax region  jsFuncArgs        contained matchgroup=jsFuncParens start='(' end=')' contains=jsFuncArgCommas,jsFuncArgRest,jsComment,jsLineComment,jsStringS,jsStringD,jsNumber,jsFuncArgDestructuring,jsArrowFunction,jsParen,jsArrowFuncArgs nextgroup=jsFuncBlock keepend skipwhite skipempty
-syntax match   jsFuncArgCommas   contained ','
-syntax match   jsFuncArgRest     contained /\%(\.\.\.[a-zA-Z_$][0-9a-zA-Z_$]*\))/ contains=jsFuncArgRestDots
-syntax match   jsFuncArgRestDots contained /\.\.\./
+" syntax match JavaScriptFuncName        contained /\%(^[\r\n\t ]*\)\@<=[*\r\n\t ]*[a-zA-Z_$][0-9a-zA-Z_$]*[\r\n\t ]*(\@=/ nextgroup=JavaScriptFuncArgs skipwhite skipempty containedin=JavaScriptBlock contains=JavaScriptGenerator
+" syntax match JavaScriptFuncName        contained /\%(,[\r\n\t ]*\)\@<=[*\r\n\t ]*[a-zA-Z_$][0-9a-zA-Z_$]*[\r\n\t ]*(\@=/ nextgroup=JavaScriptFuncArgs skipwhite skipempty containedin=JavaScriptBlock contains=JavaScriptGenerator
+syntax region JavaScriptFuncArgs        contained matchgroup=JavaScriptFuncParens start='(' end=')' contains=JavaScriptFuncArgCommas,JavaScriptFuncArgRest,JavaScriptComment,JavaScriptLineComment,JavaScriptStringS,JavaScriptStringD,JavaScriptNumber,JavaScriptFuncArgDestructuring,JavaScriptArrowFunction,JavaScriptParen,JavaScriptArrowFuncArgs nextgroup=JavaScriptFuncBlock keepend skipwhite skipempty
+syntax match JavaScriptFuncArgCommas   contained ','
+syntax match JavaScriptFuncArgRest     contained /\%(\.\.\.[a-zA-Z_$][0-9a-zA-Z_$]*\))/ contains=JavaScriptFuncArgRestDots
+syntax match JavaScriptFuncArgRestDots contained /\.\.\./
 
 " Matches a single keyword argument with no parens
-syntax match   jsArrowFuncArgs  /\k\+\s*\%(=>\)\@=/ skipwhite contains=jsFuncArgs nextgroup=jsArrowFunction extend
+syntax match JavaScriptArrowFuncArgs  /\k\+\s*\%(=>\)\@=/ skipwhite contains=JavaScriptFuncArgs nextgroup=JavaScriptArrowFunction extend
 " Matches a series of arguments surrounded in parens
-syntax match   jsArrowFuncArgs  /([^()]*)\s*\(=>\)\@=/ skipempty skipwhite contains=jsFuncArgs nextgroup=jsArrowFunction extend
+syntax match JavaScriptArrowFuncArgs  /([^()]*)\s*\(=>\)\@=/ skipempty skipwhite contains=JavaScriptFuncArgs nextgroup=JavaScriptArrowFunction extend
 
-syntax keyword jsClassKeywords extends class contained
-syntax match   jsClassNoise /\./ contained
-syntax keyword jsClassMethodDefinitions get set static contained nextgroup=jsFuncName skipwhite skipempty
-syntax match   jsClassDefinition /\<class\>\%( [a-zA-Z_$][0-9a-zA-Z_$ \n.]*\)*/  contains=jsClassKeywords,jsClassNoise nextgroup=jsClassBlock skipwhite skipempty
+syntax keyword JavaScriptClassKeywords extends class contained
+syntax match JavaScriptClassNoise /\./ contained
+syntax keyword JavaScriptClassMethodDefinitions get set static contained nextgroup=JavaScriptFuncName skipwhite skipempty
+syntax match JavaScriptClassDefinition /\<class\>\%( [a-zA-Z_$][0-9a-zA-Z_$ \n.]*\)*/  contains=JavaScriptClassKeywords,JavaScriptClassNoise nextgroup=JavaScriptClassBlock skipwhite skipempty
 
 " Define the default highlighting.
 " For version 5.7 and earlier: only when not done already
@@ -234,109 +234,109 @@ if version >= 508 || !exists("did_javascript_syn_inits")
   else
     command -nargs=+ HiLink hi def link <args>
   endif
-  HiLink jsFuncArgRest          Special
-  HiLink jsComment              Comment
-  HiLink jsLineComment          Comment
-  HiLink jsEnvComment           PreProc
-  HiLink jsBlockComment         Comment
-  HiLink jsCommentTodo          Todo
-  HiLink jsCvsTag               Function
-  HiLink jsDocTags              Special
-  HiLink jsDocSeeTag            Function
-  HiLink jsDocType              Type
-  HiLink jsDocTypeBrackets      jsDocType
-  HiLink jsDocTypeRecord        jsDocType
-  HiLink jsDocTypeNoParam       Type
-  HiLink jsDocParam             Label
-  HiLink jsStringS              String
-  HiLink jsStringD              String
-  HiLink jsTemplateString       String
-  HiLink jsTaggedTemplate       StorageClass
-  HiLink jsTernaryIfOperator    Conditional
-  HiLink jsRegexpString         String
-  HiLink jsRegexpBoundary       SpecialChar
-  HiLink jsRegexpQuantifier     SpecialChar
-  HiLink jsRegexpOr             Conditional
-  HiLink jsRegexpMod            SpecialChar
-  HiLink jsRegexpBackRef        SpecialChar
-  HiLink jsRegexpGroup          jsRegexpString
-  HiLink jsRegexpCharClass      Character
-  HiLink jsCharacter            Character
-  HiLink jsPrototype            Special
-  HiLink jsConditional          Conditional
-  HiLink jsBranch               Conditional
-  HiLink jsLabel                Label
-  HiLink jsReturn               Statement
-  HiLink jsRepeat               Repeat
-  HiLink jsStatement            Statement
-  HiLink jsException            Exception
-  HiLink jsKeyword              Keyword
-  HiLink jsAsyncKeyword         Keyword
-  HiLink jsArrowFunction        Type
-  HiLink jsFunction             Type
-  HiLink jsGenerator            jsFunction
-  HiLink jsArrowFuncArgs        jsFuncArgs
-  HiLink jsFuncName             Function
-  HiLink jsArgsObj              Special
-  HiLink jsError                Error
-  HiLink jsParensError          Error
-  HiLink jsParensErrA           Error
-  HiLink jsParensErrB           Error
-  HiLink jsParensErrC           Error
-  HiLink jsOperator             Operator
-  HiLink jsOf                   Operator
-  HiLink jsStorageClass         StorageClass
-  HiLink jsClassKeywords        Structure
-  HiLink jsThis                 Special
-  HiLink jsStatic               Special
-  HiLink jsSuper                Special
-  HiLink jsNan                  Number
-  HiLink jsNull                 Type
-  HiLink jsUndefined            Type
-  HiLink jsNumber               Number
-  HiLink jsFloat                Float
-  HiLink jsBooleanTrue          Boolean
-  HiLink jsBooleanFalse         Boolean
-  HiLink jsNoise                Noise
-  HiLink jsBrackets             Noise
-  HiLink jsParens               Noise
-  HiLink jsBraces               Noise
-  HiLink jsFuncBraces           Noise
-  HiLink jsFuncParens           Noise
-  HiLink jsClassBraces          Noise
-  HiLink jsClassNoise           Noise
-  HiLink jsSpecial              Special
-  HiLink jsTemplateVar          Special
-  HiLink jsTemplateBraces       jsBraces
-  HiLink jsGlobalObjects        Special
-  HiLink jsExceptions           Special
-  HiLink jsFutureKeys           Special
-  HiLink jsBuiltins             Special
-  HiLink jsModules              Include
-  HiLink jsModuleWords          Include
-  HiLink jsDecorator            Special
-  HiLink jsFuncArgRestDots      Noise
-  HiLink jsFuncArgDestructuring Noise
+  HiLink JavaScriptFuncArgRest          Special
+  HiLink JavaScriptComment              Comment
+  HiLink JavaScriptLineComment          Comment
+  HiLink JavaScriptEnvComment           PreProc
+  HiLink JavaScriptBlockComment         Comment
+  HiLink JavaScriptCommentTodo          Todo
+  HiLink JavaScriptCvsTag               Function
+  HiLink JavaScriptDocTags              Special
+  HiLink JavaScriptDocSeeTag            Function
+  HiLink JavaScriptDocType              Type
+  HiLink JavaScriptDocTypeBrackets      jsDocType
+  HiLink JavaScriptDocTypeRecord        jsDocType
+  HiLink JavaScriptDocTypeNoParam       Type
+  HiLink JavaScriptDocParam             Label
+  HiLink JavaScriptStringS              String
+  HiLink JavaScriptStringD              String
+  HiLink JavaScriptTemplateString       String
+  HiLink JavaScriptTaggedTemplate       StorageClass
+  HiLink JavaScriptTernaryIfOperator    Conditional
+  HiLink JavaScriptRegexpString         String
+  HiLink JavaScriptRegexpBoundary       SpecialChar
+  HiLink JavaScriptRegexpQuantifier     SpecialChar
+  HiLink JavaScriptRegexpOr             Conditional
+  HiLink JavaScriptRegexpMod            SpecialChar
+  HiLink JavaScriptRegexpBackRef        SpecialChar
+  HiLink JavaScriptRegexpGroup          jsRegexpString
+  HiLink JavaScriptRegexpCharClass      Character
+  HiLink JavaScriptCharacter            Character
+  HiLink JavaScriptPrototype            Special
+  HiLink JavaScriptConditional          Conditional
+  HiLink JavaScriptBranch               Conditional
+  HiLink JavaScriptLabel                Label
+  HiLink JavaScriptReturn               Statement
+  HiLink JavaScriptRepeat               Repeat
+  HiLink JavaScriptStatement            Statement
+  HiLink JavaScriptException            Exception
+  HiLink JavaScriptKeyword              Keyword
+  HiLink JavaScriptAsyncKeyword         Keyword
+  HiLink JavaScriptArrowFunction        Type
+  HiLink JavaScriptFunction             Type
+  HiLink JavaScriptGenerator            jsFunction
+  HiLink JavaScriptArrowFuncArgs        jsFuncArgs
+  HiLink JavaScriptFuncName             Function
+  HiLink JavaScriptArgsObj              Special
+  HiLink JavaScriptError                Error
+  HiLink JavaScriptParensError          Error
+  HiLink JavaScriptParensErrA           Error
+  HiLink JavaScriptParensErrB           Error
+  HiLink JavaScriptParensErrC           Error
+  HiLink JavaScriptOperator             Operator
+  HiLink JavaScriptOf                   Operator
+  HiLink JavaScriptStorageClass         StorageClass
+  HiLink JavaScriptClassKeywords        Structure
+  HiLink JavaScriptThis                 Special
+  HiLink JavaScriptStatic               Special
+  HiLink JavaScriptSuper                Special
+  HiLink JavaScriptNan                  Number
+  HiLink JavaScriptNull                 Type
+  HiLink JavaScriptUndefined            Type
+  HiLink JavaScriptNumber               Number
+  HiLink JavaScriptFloat                Float
+  HiLink JavaScriptBooleanTrue          Boolean
+  HiLink JavaScriptBooleanFalse         Boolean
+  HiLink JavaScriptNoise                Noise
+  HiLink JavaScriptBrackets             Noise
+  HiLink JavaScriptParens               Noise
+  HiLink JavaScriptBraces               Noise
+  HiLink JavaScriptFuncBraces           Noise
+  HiLink JavaScriptFuncParens           Noise
+  HiLink JavaScriptClassBraces          Noise
+  HiLink JavaScriptClassNoise           Noise
+  HiLink JavaScriptSpecial              Special
+  HiLink JavaScriptTemplateVar          Special
+  HiLink JavaScriptTemplateBraces       jsBraces
+  HiLink JavaScriptGlobalObjects        Special
+  HiLink JavaScriptExceptions           Special
+  HiLink JavaScriptFutureKeys           Special
+  HiLink JavaScriptBuiltins             Special
+  HiLink JavaScriptModules              Include
+  HiLink JavaScriptModuleWords          Include
+  HiLink JavaScriptDecorator            Special
+  HiLink JavaScriptFuncArgRestDots      Noise
+  HiLink JavaScriptFuncArgDestructuring Noise
 
-  HiLink jsDomErrNo             Constant
-  HiLink jsDomNodeConsts        Constant
-  HiLink jsDomElemAttrs         Label
-  HiLink jsDomElemFuncs         PreProc
+  HiLink JavaScriptDomErrNo             Constant
+  HiLink JavaScriptDomNodeConsts        Constant
+  HiLink JavaScriptDomElemAttrs         Label
+  HiLink JavaScriptDomElemFuncs         PreProc
 
-  HiLink jsHtmlEvents           Special
-  HiLink jsHtmlElemAttrs        Label
-  HiLink jsHtmlElemFuncs        PreProc
+  HiLink JavaScriptHtmlEvents           Special
+  HiLink JavaScriptHtmlElemAttrs        Label
+  HiLink JavaScriptHtmlElemFuncs        PreProc
 
-  HiLink jsCssStyles            Label
+  HiLink JavaScriptCssStyles            Label
 
-  HiLink jsClassMethodDefinitions Type
+  HiLink JavaScriptClassMethodDefinitions Type
 
   delcommand HiLink
 endif
 
 " Define the htmlJavaScript for HTML syntax html.vim
-syntax cluster  htmlJavaScript       contains=@jsAll,jsBracket,jsParen,jsBlock
-syntax cluster  javaScriptExpression contains=@jsAll,jsBracket,jsParen,jsBlock,@htmlPreproc
+syntax cluster  htmlJavaScript       contains=@jsAll,JavaScriptBracket,JavaScriptParen,JavaScriptBlock
+syntax cluster  javaScriptExpression contains=@jsAll,JavaScriptBracket,JavaScriptParen,JavaScriptBlock,@htmlPreproc
 
 " Vim's default html.vim highlights all javascript as 'Special'
 hi! def link javaScript              NONE
