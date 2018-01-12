@@ -26,7 +26,7 @@ syntax match JavaScriptNoise           /[:,\;\.]\{1}/
 "" Program Keywords
 syntax keyword JavaScriptStorageClass   const var let
 syntax keyword JavaScriptOperator       delete instanceof typeof void new in
-syntax match JavaScriptOperator       /[\!\|\&\+\-\<\>\=\%\/\*\~\^]\{1}/
+syntax match JavaScriptOperator       /[\!\|\&\+\-\<\>\=\%\/\*\~\^\\]\{1}/
 syntax keyword JavaScriptBooleanTrue    true
 syntax keyword JavaScriptBooleanFalse   false
 syntax keyword JavaScriptModules        import export contained
@@ -82,6 +82,8 @@ endif   "" JSDoc end
 syntax case match
 
 "" Syntax in the JavaScript code
+" syntax match   javaScriptIdentifier      /\k\+/
+syntax match   javaScriptIdentifier      /\.\k\+/
 syntax match JavaScriptFuncCall         /\k\+\%(\s*(\)\@=/
 syntax match JavaScriptSpecial          "\v\\%(0|\\x\x\{2\}\|\\u\x\{4\}\|\c[A-Z]|.)" contained
 syntax region JavaScriptTemplateVar      matchgroup=JavaScriptTemplateBraces start=+${+ end=+}+ contained contains=@jsExpression
@@ -185,7 +187,8 @@ endif "DOM/HTML/CSS
 "" end DOM/HTML/CSS specified things
 
 "" Code blocks
-syntax cluster jsExpression contains=JavaScriptComment,JavaScriptLineComment,JavaScriptBlockComment,JavaScriptTaggedTemplate,JavaScriptTemplateString,JavaScriptStringD,JavaScriptStringS,JavaScriptRegexpString,JavaScriptNumber,JavaScriptFloat,JavaScriptThis,JavaScriptStatic,JavaScriptSuper,JavaScriptOperator,JavaScriptBooleanTrue,JavaScriptBooleanFalse,JavaScriptNull,JavaScriptFunction,JavaScriptArrowFunction,JavaScriptGlobalObjects,JavaScriptExceptions,JavaScriptFutureKeys,JavaScriptDomErrNo,JavaScriptDomNodeConsts,JavaScriptHtmlEvents,JavaScriptDotNotation,JavaScriptBracket,JavaScriptParen,JavaScriptBlock,JavaScriptFuncCall,JavaScriptUndefined,JavaScriptNan,JavaScriptKeyword,JavaScriptStorageClass,JavaScriptPrototype,JavaScriptBuiltins,JavaScriptNoise,JavaScriptCommonJS,JavaScriptImportContainer,JavaScriptExportContainer,JavaScriptArgsObj,JavaScriptDecorator,JavaScriptAsyncKeyword,JavaScriptClassDefinition,JavaScriptArrowFunction,JavaScriptArrowFuncArgs
+syntax cluster jsExpression contains=JavaScriptComment,JavaScriptLineComment,JavaScriptBlockComment,JavaScriptTaggedTemplate,JavaScriptTemplateString,JavaScriptStringD,JavaScriptStringS,JavaScriptRegexpString,JavaScriptNumber,JavaScriptFloat,JavaScriptThis,JavaScriptStatic,JavaScriptSuper,JavaScriptOperator,JavaScriptBooleanTrue,JavaScriptBooleanFalse,JavaScriptNull,JavaScriptFunction,JavaScriptArrowFunction,JavaScriptGlobalObjects,JavaScriptExceptions,JavaScriptFutureKeys,JavaScriptDomErrNo,JavaScriptDomNodeConsts,JavaScriptHtmlEvents,JavaScriptDotNotation,JavaScriptBracket,JavaScriptParen,JavaScriptBlock,JavaScriptFuncCall,JavaScriptUndefined,JavaScriptNan,JavaScriptKeyword,JavaScriptStorageClass,JavaScriptPrototype,JavaScriptBuiltins,JavaScriptNoise,JavaScriptCommonJS,JavaScriptImportContainer,JavaScriptExportContainer,JavaScriptArgsObj,JavaScriptDecorator,JavaScriptAsyncKeyword,JavaScriptClassDefinition,JavaScriptArrowFunction,JavaScriptArrowFuncArgs,javaScriptIdentifier
+" syntax cluster jsExpression contains=JavaScriptComment,JavaScriptLineComment,JavaScriptBlockComment,JavaScriptTaggedTemplate,JavaScriptTemplateString,JavaScriptStringD,JavaScriptStringS,JavaScriptRegexpString,JavaScriptNumber,JavaScriptFloat,JavaScriptThis,JavaScriptStatic,JavaScriptSuper,JavaScriptOperator,JavaScriptBooleanTrue,JavaScriptBooleanFalse,JavaScriptNull,JavaScriptFunction,JavaScriptArrowFunction,JavaScriptGlobalObjects,JavaScriptExceptions,JavaScriptFutureKeys,JavaScriptDomErrNo,JavaScriptDomNodeConsts,JavaScriptHtmlEvents,JavaScriptDotNotation,JavaScriptBracket,JavaScriptParen,JavaScriptBlock,JavaScriptFuncCall,JavaScriptUndefined,JavaScriptNan,JavaScriptKeyword,JavaScriptStorageClass,JavaScriptPrototype,JavaScriptBuiltins,JavaScriptNoise,JavaScriptCommonJS,JavaScriptImportContainer,JavaScriptExportContainer,JavaScriptArgsObj,JavaScriptDecorator,JavaScriptAsyncKeyword,JavaScriptClassDefinition,JavaScriptArrowFunction,JavaScriptArrowFuncArgs
 syntax cluster jsAll        contains=@jsExpression,JavaScriptLabel,JavaScriptConditional,JavaScriptRepeat,JavaScriptReturn,JavaScriptStatement,JavaScriptTernaryIf,JavaScriptException
 syntax region JavaScriptBracket    matchgroup=JavaScriptBrackets     start="\[" end="\]" contains=@jsAll,JavaScriptParensErrB,JavaScriptParensErrC,JavaScriptBracket,JavaScriptParen,JavaScriptBlock,@htmlPreproc fold
 syntax region JavaScriptParen      matchgroup=JavaScriptParens       start="("  end=")"  contains=@jsAll,JavaScriptOf,JavaScriptParensErrA,JavaScriptParensErrC,JavaScriptParen,JavaScriptBracket,JavaScriptBlock,@htmlPreproc fold extend
@@ -272,7 +275,7 @@ if version >= 508 || !exists("did_javascript_syn_inits")
   HiLink JavaScriptException            Exception
   HiLink JavaScriptKeyword              Keyword
   HiLink JavaScriptAsyncKeyword         Keyword
-  HiLink JavaScriptArrowFunction        Type
+  HiLink JavaScriptArrowFunction        Define
   HiLink JavaScriptFunction             Type
   HiLink JavaScriptGenerator            jsFunction
   HiLink JavaScriptArrowFuncArgs        jsFuncArgs
@@ -286,7 +289,7 @@ if version >= 508 || !exists("did_javascript_syn_inits")
   HiLink JavaScriptOperator             Operator
   HiLink JavaScriptOf                   Operator
   HiLink JavaScriptStorageClass         StorageClass
-  HiLink JavaScriptClassKeywords        Structure
+  HiLink JavaScriptClassKeywords        Define
   HiLink JavaScriptThis                 Special
   HiLink JavaScriptStatic               Special
   HiLink JavaScriptSuper                Special
@@ -330,6 +333,7 @@ if version >= 508 || !exists("did_javascript_syn_inits")
   HiLink JavaScriptCssStyles            Label
 
   HiLink JavaScriptClassMethodDefinitions Type
+  HiLink javaScriptIdentifier                   Identifier
 
   delcommand HiLink
 endif
