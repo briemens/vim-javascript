@@ -194,7 +194,7 @@ syntax region JavaScriptBracket    matchgroup=JavaScriptBrackets     start="\[" 
 syntax region JavaScriptParen      matchgroup=JavaScriptParens       start="("  end=")"  contains=@jsAll,JavaScriptOf,JavaScriptParensErrA,JavaScriptParensErrC,JavaScriptParen,JavaScriptBracket,JavaScriptBlock,@htmlPreproc fold extend
 syntax region JavaScriptClassBlock matchgroup=JavaScriptClassBraces  start="{"  end="}"  contains=JavaScriptFuncName,JavaScriptClassMethodDefinitions,JavaScriptOperator,JavaScriptArrowFunction,JavaScriptArrowFuncArgs,JavaScriptComment,JavaScriptBlockComment,JavaScriptLineComment,JavaScriptGenerator contained fold
 syntax region JavaScriptFuncBlock  matchgroup=JavaScriptFuncBraces   start="{"  end="}"  contains=@jsAll,JavaScriptParensErrA,JavaScriptParensErrB,JavaScriptParen,JavaScriptBracket,JavaScriptBlock,@htmlPreproc,JavaScriptClassDefinition fold extend
-syntax region JavaScriptBlock      matchgroup=JavaScriptBraces       start="{"  end="}"  contains=@jsAll,JavaScriptParensErrA,JavaScriptParensErrB,JavaScriptParen,JavaScriptBracket,JavaScriptBlock,JavaScriptObjectKey,@htmlPreproc,JavaScriptClassDefinition extend
+syntax region JavaScriptBlock      matchgroup=JavaScriptBraces       start="{"  end="}"  contains=@jsAll,JavaScriptParensErrA,JavaScriptParensErrB,JavaScriptParen,JavaScriptBracket,JavaScriptBlock,JavaScriptObjectKey,@htmlPreproc,JavaScriptClassDefinition fold extend
 syntax region JavaScriptTernaryIf  matchgroup=JavaScriptTernaryIfOperator start=+?+  end=+:+  contains=@jsExpression,JavaScriptTernaryIf
 
 "" catch errors caused by wrong parenthesis
