@@ -226,6 +226,7 @@ syntax keyword JavaScriptClassKeywords extends class contained
 syntax match JavaScriptClassNoise /\./ contained
 syntax keyword JavaScriptClassMethodDefinitions get set static contained nextgroup=JavaScriptFuncName skipwhite skipempty
 syntax match JavaScriptClassDefinition /\<class\>\%( [a-zA-Z_$][0-9a-zA-Z_$ \n.]*\)*/  contains=JavaScriptClassKeywords,JavaScriptClassNoise nextgroup=JavaScriptClassBlock skipwhite skipempty
+syntax match JavaScriptClassName        /\<[a-zA-Z_$][0-9a-zA-Z_$]*/ contained containedin=JavaScriptClassDefinition nextgroup=JavaScriptClassBlock skipwhite skipempty
 
 " Define the default highlighting.
 " For version 5.7 and earlier: only when not done already
