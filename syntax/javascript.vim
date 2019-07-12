@@ -89,7 +89,7 @@ syntax match JavaScriptSpecial          "\v\\%(0|\\x\x\{2\}\|\\u\x\{4\}\|\c[A-Z]
 syntax region JavaScriptTemplateVar      matchgroup=JavaScriptTemplateBraces start=+${+ end=+}+ contained contains=@jsExpression
 syntax region JavaScriptStringD          start=+"+  skip=+\\\("\|$\)+  end=+"\|$+  contains=JavaScriptSpecial,@htmlPreproc,@Spell
 syntax region JavaScriptStringS          start=+'+  skip=+\\\('\|$\)+  end=+'\|$+  contains=JavaScriptSpecial,@htmlPreproc,@Spell
-syntax region JavaScriptTemplateString   start=+`+  skip=+\\\(`\|$\)+  end=+`+     contains=JavaScriptTemplateVar,JavaScriptSpecial,@htmlPreproc
+syntax region JavaScriptTemplateString   start=+`+  skip=+\\\(`\|$\)+  end=+`+     contains=JavaScriptTemplateVar,JavaScriptSpecial,@htmlPreproc fold
 syntax region JavaScriptTaggedTemplate   start=/\k\+\%([\n\s]\+\)\?`/ end=+`+ contains=JavaScriptTemplateString keepend
 syntax region JavaScriptRegexpCharClass  start=+\[+ skip=+\\.+ end=+\]+ contained
 syntax match JavaScriptRegexpBoundary   "\v%(\<@![\^$]|\\[bB])" contained
@@ -192,7 +192,7 @@ syntax cluster jsExpression contains=JavaScriptComment,JavaScriptLineComment,Jav
 syntax cluster jsAll        contains=@jsExpression,JavaScriptLabel,JavaScriptConditional,JavaScriptRepeat,JavaScriptReturn,JavaScriptStatement,JavaScriptTernaryIf,JavaScriptException
 syntax region JavaScriptBracket    matchgroup=JavaScriptBrackets     start="\[" end="\]" contains=@jsAll,JavaScriptParensErrB,JavaScriptParensErrC,JavaScriptBracket,JavaScriptParen,JavaScriptBlock,@htmlPreproc fold
 syntax region JavaScriptParen      matchgroup=JavaScriptParens       start="("  end=")"  contains=@jsAll,JavaScriptOf,JavaScriptParensErrA,JavaScriptParensErrC,JavaScriptParen,JavaScriptBracket,JavaScriptBlock,@htmlPreproc fold extend
-syntax region JavaScriptClassBlock matchgroup=JavaScriptClassBraces  start="{"  end="}"  contains=JavaScriptFuncName,JavaScriptClassMethodDefinitions,JavaScriptOperator,JavaScriptArrowFunction,JavaScriptArrowFuncArgs,JavaScriptComment,JavaScriptBlockComment,JavaScriptLineComment,JavaScriptGenerator contained fold
+syntax region JavaScriptClassBlock matchgroup=JavaScriptClassBraces  start="{"  end="}"  contains=JavaScriptFuncName,JavaScriptClassMemberName,JavaScriptClassMethodDefinitions,JavaScriptOperator,JavaScriptArrowFunction,JavaScriptArrowFuncArgs,JavaScriptComment,JavaScriptBlockComment,JavaScriptLineComment,JavaScriptGenerator contained fold
 syntax region JavaScriptFuncBlock  matchgroup=JavaScriptFuncBraces   start="{"  end="}"  contains=@jsAll,JavaScriptParensErrA,JavaScriptParensErrB,JavaScriptParen,JavaScriptBracket,JavaScriptBlock,@htmlPreproc,JavaScriptClassDefinition fold extend
 syntax region JavaScriptBlock      matchgroup=JavaScriptBraces       start="{"  end="}"  contains=@jsAll,JavaScriptParensErrA,JavaScriptParensErrB,JavaScriptParen,JavaScriptBracket,JavaScriptBlock,JavaScriptObjectKey,@htmlPreproc,JavaScriptClassDefinition fold extend
 syntax region JavaScriptTernaryIf  matchgroup=JavaScriptTernaryIfOperator start=+?+  end=+:+  contains=@jsExpression,JavaScriptTernaryIf
@@ -203,16 +203,19 @@ syntax match JavaScriptParensErrA     contained "\]"
 syntax match JavaScriptParensErrB     contained ")"
 syntax match JavaScriptParensErrC     contained "}"
 
-syntax match JavaScriptFuncArgDestructuring contained /\({\|}\|=\|:\|\[\|\]\)/ extend
+syntax match JavaScriptFuncArgDestructuring contained /\({\|}\|=\|:\|\[\|\]\)/ extend fold
+syntax region JavaScriptFuncArgDestructuringBlock  contained matchgroup=JavaScriptFuncArgDestructuringBlock start="{"  end="}"  containedin=JavaScriptFuncParens contains=JavaScriptFuncArgs,JavaScriptFuncArgCommas,JavaScriptFuncArgDestructuring fold
+
 exe 'syntax match JavaScriptFunction /\<function\>/ nextgroup=JavaScriptGenerator,JavaScriptFuncName,JavaScriptFuncArgs skipwhite '.(exists('g:javascript_conceal_function') ? 'conceal cchar='.g:javascript_conceal_function : '')
 exe 'syntax match JavaScriptArrowFunction /=>/ skipwhite nextgroup=JavaScriptFuncBlock contains=JavaScriptFuncBraces '.(exists('g:javascript_conceal_arrow_function') ? 'conceal cchar='.g:javascript_conceal_arrow_function : '')
 
 syntax match JavaScriptGenerator       contained /\*/ nextgroup=JavaScriptFuncName,JavaScriptFuncArgs skipwhite skipempty
-syntax match JavaScriptFuncName        contained /\<[a-zA-Z_$][0-9a-zA-Z_$]*/ nextgroup=JavaScriptFuncArgs skipwhite skipempty
+syntax match JavaScriptFuncName        contained /\<[a-zA-Z_$][0-9a-zA-Z_$]*[\r\n\t ]*(\@=/ nextgroup=JavaScriptFuncArgs skipwhite skipempty
+syntax match JavaScriptClassMemberName contained containedin=JavaScriptClassBlock /\%(\<[a-zA-Z_$][0-9a-zA-Z_$]*\)[\r\n\t ]*=/ contains=JavaScriptOperator nextgroup=JavaScriptBlock skipwhite skipempty
 " These versions of jsFuncName is for use in object declarations with no key
 " syntax match JavaScriptFuncName        contained /\%(^[\r\n\t ]*\)\@<=[*\r\n\t ]*[a-zA-Z_$][0-9a-zA-Z_$]*[\r\n\t ]*(\@=/ nextgroup=JavaScriptFuncArgs skipwhite skipempty containedin=JavaScriptBlock contains=JavaScriptGenerator
 " syntax match JavaScriptFuncName        contained /\%(,[\r\n\t ]*\)\@<=[*\r\n\t ]*[a-zA-Z_$][0-9a-zA-Z_$]*[\r\n\t ]*(\@=/ nextgroup=JavaScriptFuncArgs skipwhite skipempty containedin=JavaScriptBlock contains=JavaScriptGenerator
-syntax region JavaScriptFuncArgs        contained matchgroup=JavaScriptFuncParens start='(' end=')' contains=JavaScriptFuncArgCommas,JavaScriptFuncArgRest,JavaScriptComment,JavaScriptLineComment,JavaScriptStringS,JavaScriptStringD,JavaScriptNumber,JavaScriptFuncArgDestructuring,JavaScriptArrowFunction,JavaScriptParen,JavaScriptArrowFuncArgs nextgroup=JavaScriptFuncBlock keepend skipwhite skipempty
+syntax region JavaScriptFuncArgs        contained matchgroup=JavaScriptFuncParens start='(' end=')' contains=JavaScriptFuncArgCommas,JavaScriptFuncArgRest,JavaScriptComment,JavaScriptLineComment,JavaScriptStringS,JavaScriptStringD,JavaScriptNumber,JavaScriptFuncArgDestructuring,JavaScriptArrowFunction,JavaScriptParen,JavaScriptArrowFuncArgs,JavaScriptFuncArgCommas,JavaScriptFuncArgs,JavaScriptFuncArgDestructuringBlock nextgroup=JavaScriptFuncBlock keepend skipwhite skipempty fold
 syntax match JavaScriptFuncArgCommas   contained ','
 syntax match JavaScriptFuncArgRest     contained /\%(\.\.\.[a-zA-Z_$][0-9a-zA-Z_$]*\))/ contains=JavaScriptFuncArgRestDots
 syntax match JavaScriptFuncArgRestDots contained /\.\.\./
@@ -281,6 +284,7 @@ if version >= 508 || !exists("did_javascript_syn_inits")
   HiLink JavaScriptGenerator            jsFunction
   HiLink JavaScriptArrowFuncArgs        jsFuncArgs
   HiLink JavaScriptFuncName             Function
+  HiLink JavaScriptClassMemberName      Identifier
   HiLink JavaScriptArgsObj              Special
   HiLink JavaScriptError                Error
   HiLink JavaScriptParensError          Error
