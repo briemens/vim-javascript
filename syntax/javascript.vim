@@ -24,7 +24,7 @@ syntax sync fromstart
 syntax match JavaScriptNoise           /[:,\;\.]\{1}/
 
 "" Program Keywords
-syntax keyword JavaScriptStorageClass   const var let
+syntax keyword JavaScriptStorageClass   const var let contained
 syntax keyword JavaScriptOperator       delete instanceof typeof void new in
 syntax match JavaScriptOperator       /[\!\|\&\+\-\<\>\=\%\/\*\~\^\\]\{1}/
 syntax keyword JavaScriptBooleanTrue    true
@@ -193,7 +193,7 @@ syntax cluster jsAll        contains=@jsExpression,JavaScriptLabel,JavaScriptCon
 syntax region JavaScriptBracket    matchgroup=JavaScriptBrackets     start="\[" end="\]" contains=@jsAll,JavaScriptParensErrB,JavaScriptParensErrC,JavaScriptBracket,JavaScriptParen,JavaScriptBlock,@htmlPreproc fold
 syntax region JavaScriptParen      matchgroup=JavaScriptParens       start="("  end=")"  contains=@jsAll,JavaScriptOf,JavaScriptParensErrA,JavaScriptParensErrC,JavaScriptParen,JavaScriptBracket,JavaScriptBlock,@htmlPreproc fold extend
 syntax region JavaScriptClassBlock matchgroup=JavaScriptClassBraces  start="{"  end="}"  contains=JavaScriptFuncName,JavaScriptClassMemberName,JavaScriptClassMethodDefinitions,JavaScriptOperator,JavaScriptArrowFunction,JavaScriptArrowFuncArgs,JavaScriptComment,JavaScriptBlockComment,JavaScriptLineComment,JavaScriptGenerator contained fold
-syntax region JavaScriptFuncBlock  matchgroup=JavaScriptFuncBraces   start="{"  end="}"  contains=@jsAll,JavaScriptParensErrA,JavaScriptParensErrB,JavaScriptParen,JavaScriptBracket,JavaScriptBlock,@htmlPreproc,JavaScriptClassDefinition fold extend
+syntax region JavaScriptFuncBlock  matchgroup=JavaScriptFuncBraces   start="{"  end="}"  contains=@jsAll,JavaScriptParensErrA,JavaScriptParensErrB,JavaScriptParen,JavaScriptBracket,JavaScriptBlock,@htmlPreproc,JavaScriptClassDefinition,JavaScriptVariableDefinition fold extend
 syntax region JavaScriptBlock      matchgroup=JavaScriptBraces       start="{"  end="}"  contains=@jsAll,JavaScriptParensErrA,JavaScriptParensErrB,JavaScriptParen,JavaScriptBracket,JavaScriptBlock,JavaScriptObjectKey,@htmlPreproc,JavaScriptClassDefinition fold extend
 syntax region JavaScriptTernaryIf  matchgroup=JavaScriptTernaryIfOperator start=+?+  end=+:+  contains=@jsExpression,JavaScriptTernaryIf
 
@@ -231,6 +231,16 @@ syntax keyword JavaScriptClassMethodDefinitions get set static contained nextgro
 syntax match JavaScriptClassDefinition /\<class\>\%( [a-zA-Z_$][0-9a-zA-Z_$ \n.]*\)*/  contains=JavaScriptClassKeywords,JavaScriptClassNoise nextgroup=JavaScriptClassBlock skipwhite skipempty
 syntax match JavaScriptClassName        /\<[a-zA-Z_$][0-9a-zA-Z_$]*/ contained containedin=JavaScriptClassDefinition nextgroup=JavaScriptClassBlock skipwhite skipempty
 
+
+" syntax match JavaScriptVariableDefinition /\<const\>\%( [a-zA-Z_$][0-9a-zA-Z_$ \n.]*\)*/  contains=JavaScriptClassKeywords,JavaScriptClassNoise nextgroup=JavaScriptClassBlock skipwhite skipempty
+" syntax match JavaScriptAssignment /\%(\ *=\ *\)/ contains=JavaScriptOperator,JavaScriptFunction,JavaScriptArrowFuncArgs
+" syntax match JavaScriptVariableDefinition /\<const\>\%( [a-zA-Z_$][0-9a-zA-Z_$ \n.]*\)*/ contains=JavaScriptStorageClass,JavaScriptClassNoise nextgroup=JavaScriptOperator skipwhite skipempty
+" syntax match JavaScriptVariableName        /\<[a-zA-Z_$][0-9a-zA-Z_$]*/ contained containedin=JavaScriptVariableDefinition nextgroup=JavaScriptOperator skipwhite skipempty
+" syntax match JavaScriptFunctionVariableDefinition /\<const\>\%( [a-zA-Z_$][0-9a-zA-Z_$ \n.]*\)*\ *=\ *\%(function\)/ contains=JavaScriptStorageClass,JavaScriptClassNoise,JavaScriptFunction skipwhite skipempty
+" syntax match JavaScriptFunctionVariableName        /\<[a-zA-Z_$][0-9a-zA-Z_$]*/ contained containedin=JavaScriptFunctionVariableDefinition nextgroup=JavaScriptFunction skipwhite skipempty
+
+syntax match JavaScriptVariableDefinition /[ \t]*\(const\|let\|var\)\%( [a-zA-Z_$][0-9a-zA-Z_$ \n.]*\)*/ contains=JavaScriptStorageClass,JavaScriptClassNoise nextgroup=JavaScriptOperator skipwhite skipempty
+syntax match JavaScriptVariableName        /\<[a-zA-Z_$][0-9a-zA-Z_$]*/ contained containedin=JavaScriptVariableDefinition nextgroup=JavaScriptOperator skipwhite skipempty
 " Define the default highlighting.
 " For version 5.7 and earlier: only when not done already
 " For version 5.8 and later: only when an item doesn't have highlighting yet
